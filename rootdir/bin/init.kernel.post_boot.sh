@@ -34,6 +34,9 @@ if [ -f /sys/devices/soc0/soc_id ]; then
 	platformid=`cat /sys/devices/soc0/soc_id`
 fi
 
+on early-init
+    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
+
 case "$platformid" in
     "415"|"439"|"456"|"501"|"502")
 	/vendor/bin/sh /vendor/bin/init.kernel.post_boot-lahaina.sh
@@ -50,3 +53,13 @@ case "$platformid" in
 	;;
 esac
 
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+    # Load ADSP firmware for PMIC
+    mkdir /firmware
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro context=u:object_r:firmware_file:s0
+
+on property:dev.mnt.blk.firmware=*
+    write /sys/kernel/boot_adsp/boot 1
