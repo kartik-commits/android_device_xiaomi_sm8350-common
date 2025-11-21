@@ -49,12 +49,13 @@ blob_fixups: blob_fixups_user_type = {
     ('vendor/etc/media_lahaina/video_system_specs.json', 'vendor/etc/media_shima_v1/video_system_specs.json', 'vendor/etc/media_yupik_v1/video_system_specs.json'): blob_fixup()
         .regex_replace('"max_retry_alloc_output_timeout": 10000,', '"max_retry_alloc_output_timeout": 0,'),
     'vendor/etc/vintf/manifest/c2_manifest_vendor.xml': blob_fixup()
-        .regex_replace('.*ozoaudio.*\n?', '')
-        .regex_replace('.*dolby.*\n?', ''),
+        .regex_replace('.*ozoaudio.*\n?', ''),
     ('vendor/lib64/mediadrm/libwvdrmengine.so', 'vendor/lib64/libwvhidl.so'): blob_fixup()
         .add_needed('libcrypto_shim.so'),
     'vendor/lib64/android.hardware.secure_element@1.0-impl.so': blob_fixup()
         .remove_needed('android.hidl.base@1.0.so'),
+    ('vendor/lib/c2.dolby.client.so'): blob_fixup()
+        .add_needed('libcodec2_hidl_shim.so'),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
