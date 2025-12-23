@@ -402,7 +402,9 @@ PRODUCT_COPY_FILES += \
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
-    hardware/xiaomi
+    hardware/xiaomi \
+    vendor/qcom/opensource/commonsys-intf/display \
+    hardware/qcom-caf/wlan/qcwcn
 
 # Telephony
 PRODUCT_PACKAGES += \
